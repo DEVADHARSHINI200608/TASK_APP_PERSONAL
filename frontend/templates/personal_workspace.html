@@ -1,0 +1,36 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Workspace</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+
+    <div class="workspace-container">
+        <!-- Task Button -->
+        <button class="icon-button" id="taskButton">
+            <img src="{% static 'images/task_logo.png' %}" alt="Task Icon" class="icon">
+        </button>
+
+        <!-- Settings Button -->
+        <button class="icon-button" id="settingsButton">
+            <img src="{% static 'images/settings_icon.png' %}" alt="Settings Icon" class="icon">
+        </button>
+    </div>
+
+    <script>
+        document.getElementById("taskButton").addEventListener("click", function () {
+            window.location.href = "{% url 'task' %}";  // Navigates only when clicked
+        });
+
+        document.getElementById("settingsButton").addEventListener("click", function () {
+            window.location.href = "{% url 'settings' %}";  // Navigates only when clicked
+        });
+    </script>
+
+</body>
+</html>

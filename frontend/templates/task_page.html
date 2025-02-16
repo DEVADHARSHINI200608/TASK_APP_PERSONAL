@@ -1,0 +1,183 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Page</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+    <div class="body">
+        <div class="header-bar">
+            <h1>MY PERSONAL PROGRESS</h1>
+        </div>
+        
+        <div class="container">
+            <img src="{% static 'images/student.gif' %}" alt="Animated GIF" class="gif-left">
+            
+            <div class="task-container">
+                <header>
+                    <h2>My Tasks</h2>
+                </header>
+
+                <!-- Search Bar -->
+                <input type="text" id="search-bar" placeholder="Search tasks..." onkeyup="searchTasks()">
+
+                <!-- Task List -->
+                <div class="task-list" id="task-list">
+                    <div class="task-item" data-task-id="1">
+                        <span>Create Assignment</span>
+                        <button class="edit-btn" onclick="editTask(this)">✏️</button>
+                        <button class="delete-btn" onclick="deleteTask(1)">🗑️</button>
+                    </div>
+                    <div class="task-item starred" data-task-id="2">
+                        <span>Preparation for Exam</span>
+                        <button class="edit-btn" onclick="editTask(this)">✏️</button>
+                        <button class="delete-btn" onclick="deleteTask(2)">🗑️</button>
+                    </div>
+                </div>
+
+                <!-- Add Task Button -->
+                <button onclick="openTaskEditor()">Open Editor</button>
+
+                <!-- Task Editor (Initially Hidden) -->
+                <div class="task-editor" id="task-editor" style="display: none;">
+                    <textarea id="task-content" placeholder="Write your task here..."></textarea>
+                    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+                    <button class="save-task-btn" onclick="saveTask()">Save Task</button>
+                    <button class="close-task-btn" onclick="closeTaskEditor()">Cancel</button>
+                </div>
+                
+                <!-- View Tasks Button -->
+                <button onclick="viewTasks()">View Saved Tasks</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openTaskEditor() {
+            console.log("openTaskEditor function called");
+            document.getElementById("task-editor").style.display = "block";
+        }
+
+        function closeTaskEditor() {
+            document.getElementById("task-editor").style.display = "none";
+        }
+
+        function saveTask() {
+            console.log("saveTask function called");
+            let taskContent = document.getElementById("task-content").value;
+
+            if (taskContent.trim() === "") {
+                alert("Task cannot be empty!");
+                return;
+            }
+
+            let taskId = document.getElementById("task-editor").dataset.editingTaskId;
+            let url = taskId ? `/update-task/${taskId}/` : "/save-task/";
+            let method = taskId ? "PUT" : "POST";
+
+            fetch(url, {
+                method: method,
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": getCSRFToken(),
+                },
+                body: JSON.stringify({ content: taskContent }),
+            }).then(response => {
+                if (response.ok) {
+                    window.location.reload();
+                } else {
+                    alert("Error saving task!");
+                }
+            }).catch(error => {
+                alert("Network error: " + error.message);
+            });
+        }
+
+        function deleteTask(taskId) {
+            if (confirm("Are you sure you want to delete this task?")) {
+                fetch(`/delete-task/${taskId}/`, {
+                    method: "POST", // Use POST instead of DELETE
+                    headers: {
+                        "X-CSRFToken": getCSRFToken(),
+                    }
+                }).then(response => {
+                    if (response.ok) {
+                        window.location.reload();
+                    } else {
+                        alert("Error deleting task!");
+                    }
+                }).catch(error => {
+                    alert("Network error: " + error.message);
+                });
+            }
+        }
+
+        function viewTasks() {
+            fetch("/get-tasks/")
+                .then(response => response.json())
+                .then(tasks => {
+                    let taskList = document.getElementById("task-list");
+                    taskList.innerHTML = ""; // Clear existing tasks
+                    tasks.forEach(task => {
+                        let taskItem = document.createElement("div");
+                        taskItem.className = "task-item";
+                        taskItem.dataset.taskId = task.id;
+
+                        let taskContent = document.createElement("span");
+                        taskContent.innerText = task.title;
+
+                        let editButton = document.createElement("button");
+                        editButton.className = "edit-btn";
+                        editButton.innerText = "✏️";
+                        editButton.onclick = () => editTask(editButton);
+
+                        let deleteButton = document.createElement("button");
+                        deleteButton.className = "delete-btn";
+                        deleteButton.innerText = "🗑️";
+                        deleteButton.onclick = () => deleteTask(task.id);
+
+                        taskItem.appendChild(taskContent);
+                        taskItem.appendChild(editButton);
+                        taskItem.appendChild(deleteButton);
+                        taskList.appendChild(taskItem);
+                    });
+                })
+                .catch(error => {
+                    alert("Error fetching tasks: " + error.message);
+                });
+        }
+
+        function getCSRFToken() {
+            return document.querySelector('[name=csrfmiddlewaretoken]').value;
+        }
+
+        function searchTasks() {
+            let searchQuery = document.getElementById("search-bar").value.toLowerCase();
+            let tasks = document.querySelectorAll(".task-item");
+
+            tasks.forEach(task => {
+                let taskText = task.innerText.toLowerCase();
+                if (taskText.includes(searchQuery)) {
+                    task.style.display = "block";
+                } else {
+                    task.style.display = "none";
+                }
+            });
+        }
+
+        function editTask(button) {
+            let taskItem = button.parentElement;
+            let taskContent = taskItem.querySelector("span").innerText;
+            let taskId = taskItem.dataset.taskId;
+
+            openTaskEditor();
+            document.getElementById("task-content").value = taskContent;
+            document.getElementById("task-editor").dataset.editingTaskId = taskId;
+        }
+    </script>
+    <script src="{% static 'scripts.js' %}"></script>
+</body>
+</html>

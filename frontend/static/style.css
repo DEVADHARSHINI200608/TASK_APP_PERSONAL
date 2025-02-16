@@ -1,0 +1,147 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+.workspace-container {
+    width: 90%;
+    max-width: 600px;
+    margin: auto;
+    padding: 20px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+}
+
+.task-logo {
+    width: 40px;
+    height: 40px;
+    display:block;
+}
+
+.settings-icon {
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+}
+
+.task-list {
+    margin-top: 20px;
+}
+
+.task-item {
+    display: flex;
+    justify-content: space-between;
+    background: #e3e3e3;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+.add-task-btn {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: #007bff;
+    color: white;
+    font-size: 24px;
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    border: none;
+    cursor: pointer;
+}
+
+.add-task-btn:hover {
+    background: #0056b3;
+}
+
+.task-container{
+    height: 45%;
+    width: 50%; /* Adjust width as needed */
+    background-color: #f1c972; /* Light background */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Soft shadow */
+    border-radius: 10px; /* Rounded corners */
+    padding: 20px;
+
+    /* Move towards the right and slightly down */
+    position: absolute;
+    top: 170px; /* Adjust to move slightly down */
+    right: 50px; /* Adjust to place near the right margin */
+    z-index:5
+}
+/* Style for GIF */
+.gif-left {
+    .gif-left {
+        width: 40%; /* Adjust width to match task container */
+        max-width: 400px;
+        height: auto;
+        box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.2);
+        border-radius: 15px;
+    }
+}
+    
+.settings-container {
+    width: 90%;
+    max-width: 600px;
+    margin: auto;
+    padding: 20px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+textarea {
+    width: 100%;
+    height: 200px;
+    padding: 10px;
+    font-size: 16px;
+}
+
+.save-task-btn {
+    width: 100%;
+    padding: 10px;
+    background: #28a745;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.save-task-btn:hover {
+    background: #218838;
+}
+/* Header Bar */
+.header-bar {
+    background-color: #E0BBE4; /* Light purple */
+    width: 100%;
+    height: 100px; /* Adjust height as needed */
+    display: flex;
+    justify-content: center; /* Centers content horizontally */
+    align-items: center; /* Centers content vertically */
+}
+
+/* Title Styling */
+.header-bar h1 {
+    font-family: monospace;
+    font-size: 40px;
+    font-weight: bold;
+    text-align: center;
+    color: black;
+}
+body {
+    background-color: #c2c0f6; /* Change to any color you prefer */
+    color: #333;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
